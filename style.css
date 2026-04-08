@@ -1,9 +1,45 @@
+@font-face {
+  font-family: 'Bembo Std';
+  src: url('fonts/BemboStd.woff2') format('woff2'),
+       url('fonts/BemboStd.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bembo Std';
+  src: url('fonts/BemboStd-Italic.woff2') format('woff2'),
+       url('fonts/BemboStd-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bembo Std';
+  src: url('fonts/BemboStd-Bold.woff2') format('woff2'),
+       url('fonts/BemboStd-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bembo Std';
+  src: url('fonts/BemboStd-BoldItalic.woff2') format('woff2'),
+       url('fonts/BemboStd-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   background: white;
   color: black;
-  font-family: 'Bembo', 'Bembo Std', 'Book Antiqua', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-family: 'Bembo Std', 'Book Antiqua', Palatino, Georgia, serif;
 }
 
 .menu {
