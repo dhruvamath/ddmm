@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Images</title>
+  <meta name="description" content="A weekly moodboard — images that reflect what I've been watching, listening to, and thinking about.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── page header ─────────────────────────── */
+    .images-header {
+      padding: 2rem 2rem 1.25rem;
+    }
+
+    .images-header h1 {
+      font-weight: normal;
+      font-size: 2rem;
+      margin: 0 0 0.35rem;
+    }
+
+    .week-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin: 0 0 0.5rem;
+    }
+
+    .week-note {
+      font-size: 0.95rem;
+      opacity: 0.55;
+      margin: 0;
+      max-width: 42ch;
+      line-height: 1.55;
+      font-style: italic;
+    }
+
+    /* ── masonry grid ────────────────────────── */
+    .moodboard {
+      padding: 1.5rem 2rem 4rem;
+      columns: 3;
+      column-gap: 0.75rem;
+    }
+
+    @media (max-width: 860px) {
+      .moodboard { columns: 2; }
+    }
+
+    @media (max-width: 520px) {
+      .moodboard { columns: 1; }
+    }
+
+    /* ── individual image tile ───────────────── */
+    .tile {
+      break-inside: avoid;
+      position: relative;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .tile img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: opacity 0.35s ease;
+      filter: grayscale(100%);
+    }
+
+    .tile:hover img {
+      opacity: 0.35;
+    }
+
+    .tile-caption {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .tile:hover .tile-caption {
+      opacity: 1;
+    }
+
+    .tile-caption span {
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+      color: black;
+    }
+
+    /* ── archive nav (future use) ────────────── */
+    .archive-nav {
+      padding: 0 2rem 3rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .archive-btn {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid black;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      background: transparent;
+      font-family: inherit;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .archive-btn:hover,
+    .archive-btn.active {
+      background: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="menu">
+    <a href="index.html">←</a>
+  </div>
+
+  <div class="images-header">
+    <p class="week-label" id="week-label"></p>
+    <h1>Images</h1>
+    <p class="week-note" id="week-note"></p>
+  </div>
+
+  <!-- week selector (auto-populated if more than 1 week) -->
+  <div class="archive-nav" id="archive-nav"></div>
+
+  <!-- masonry grid -->
+  <div class="moodboard" id="moodboard"></div>
+
+  <script src="images/data.js"></script>
+  <script>
+    (function () {
+      if (!MOODBOARD || MOODBOARD.length === 0) return;
+
+      let currentIndex = 0;
+
+      function renderWeek(index) {
+        const week = MOODBOARD[index];
+
+        document.getElementById('week-label').textContent = week.week || '';
+        document.getElementById('week-note').textContent  = week.note  || '';
+
+        const grid = document.getElementById('moodboard');
+        grid.innerHTML = '';
+
+        (week.images || []).forEach(function (img) {
+          const tile = document.createElement('div');
+          tile.className = 'tile';
+
+          const image = document.createElement('img');
+          image.src = img.src;
+          image.alt = img.caption || '';
+          image.loading = 'lazy';
+
+          tile.appendChild(image);
+
+          if (img.caption) {
+            const cap = document.createElement('div');
+            cap.className = 'tile-caption';
+            cap.innerHTML = '<span>' + img.caption + '</span>';
+            tile.appendChild(cap);
+          }
+
+          grid.appendChild(tile);
+        });
+
+        // update active button
+        document.querySelectorAll('.archive-btn').forEach(function (btn, i) {
+          btn.classList.toggle('active', i === index);
+        });
+      }
+
+      // build week-selector buttons only if > 1 week
+      const nav = document.getElementById('archive-nav');
+      if (MOODBOARD.length > 1) {
+        MOODBOARD.forEach(function (week, i) {
+          const btn = document.createElement('button');
+          btn.className = 'archive-btn' + (i === 0 ? ' active' : '');
+          btn.textContent = week.week;
+          btn.addEventListener('click', function () {
+            currentIndex = i;
+            renderWeek(i);
+          });
+          nav.appendChild(btn);
+        });
+      }
+
+      renderWeek(0);
+    })();
+  </script>
+
+</body>
+</html>
